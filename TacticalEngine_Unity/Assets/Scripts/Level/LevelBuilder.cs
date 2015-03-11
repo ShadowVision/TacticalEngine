@@ -8,8 +8,8 @@ public class LevelBuilder : MonoBehaviour {
 	public bool generateRandomMap = false;
 	public CameraController cameraController;
 	public Level levelTemplate;
-	public int defaultTileHeight=1;
 	public int defaultMapSize=5;
+	public int defaultMapHeight=1;
 
 
 	// Use this for initialization
@@ -39,11 +39,13 @@ public class LevelBuilder : MonoBehaviour {
 
 		List<TileOptions> tileOptions = new List<TileOptions> ();
 		for(int x=0; x<defaultMapSize; x++){
-			for(int y=0; y<defaultMapSize; y++){
-				TileOptions to = new TileOptions ();
-				to.height = Random.Range(1,6);
-				to.position = new TilePosition (x, y);
-				tileOptions.Add(to);
+			int height = Random.Range(1,6);
+			for(int y=0; y<height; y++){
+				for(int z=0; z<defaultMapSize; z++){
+					TileOptions to = new TileOptions ();
+					to.position = new TilePosition (x, y, z);
+					tileOptions.Add(to);
+				}
 			}
 		}
 		options.tiles = tileOptions;
@@ -57,11 +59,12 @@ public class LevelBuilder : MonoBehaviour {
 
 		List<TileOptions> tileOptions = new List<TileOptions> ();
 		for(int x=0; x<defaultMapSize; x++){
-			for(int y=0; y<defaultMapSize; y++){
-				TileOptions to = new TileOptions ();
-				to.height = defaultTileHeight;
-				to.position = new TilePosition (x, y);
-				tileOptions.Add(to);
+			for(int y=0; y<defaultMapHeight; y++){
+				for(int z=0; z<defaultMapSize; z++){
+					TileOptions to = new TileOptions ();
+					to.position = new TilePosition (x, y, z);
+					tileOptions.Add(to);
+				}
 			}
 		}
 		options.tiles = tileOptions;

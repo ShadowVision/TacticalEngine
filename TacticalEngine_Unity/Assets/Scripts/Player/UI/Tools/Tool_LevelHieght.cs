@@ -6,12 +6,13 @@ public class Tool_LevelHieght : Tool {
 	private LevelTile tile;
 	private Vector3 lastMousePosition;
 	private Vector3 mouseDragDistance;
+	private UI_Controller ui;
 
 	public float thresholdYInPixels = 50;
 
 	// Use this for initialization
 	void Start () {
-	
+		ui = toolbar.hud.ui;
 	}
 	
 	// Update is called once per frame
@@ -48,10 +49,11 @@ public class Tool_LevelHieght : Tool {
 			Debug.Log("Starting Drag");
 			dragging = true;
 			lastMousePosition = Input.mousePosition;
+			captureTile();
 		}
 	}
 	private void drag(){
-		if(LevelTile.focusedTile != null){
+		if(ui.focusGroup != null){
 			int dragChangeAmount = 0;
 			mouseDragDistance = Input.mousePosition - lastMousePosition;
 			if(mouseDragDistance.y > thresholdYInPixels){
@@ -61,7 +63,7 @@ public class Tool_LevelHieght : Tool {
 				dragChangeAmount = -1;
 				lastMousePosition = Input.mousePosition;
 			}
-			LevelTile.focusedTile.height = LevelTile.focusedTile.height + dragChangeAmount;
+			//ui.getAll() = LevelTile.focusedTile.height + dragChangeAmount;
 		}
 	}
 	private void stopDrag(){

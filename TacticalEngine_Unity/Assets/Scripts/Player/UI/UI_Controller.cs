@@ -5,6 +5,7 @@ public class UI_Controller : MonoBehaviour {
 	[HideInInspector]
 	public Player_Controller player;
 	public UI_HUD hud;
+	public FocusGroup focusGroup;
 
 	// Use this for initialization
 	void Awake () {

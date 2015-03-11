@@ -34,7 +34,6 @@ public class Level : MonoBehaviour {
 			LevelTile tile = (LevelTile)Instantiate(tileTemplate);
 			tile.name = ("Tile_"+tileOptions.position.x+","+tileOptions.position.y);
 			tile.transform.parent = tileHolder.transform;
-			tile.transform.position = new Vector3(tileOptions.position.x,0,tileOptions.position.y);
 			tile.init(tileOptions);
 			tiles.Add(tile.position, tile);
 		}

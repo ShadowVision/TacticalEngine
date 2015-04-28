@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using System.Collections;
+using GameData;
 
-public class GameAsset : MonoBehaviour {
-	public GameAsset_Data data; 
+public class GameTile_Data : GameAsset_Data {
 
 	// Use this for initialization
 	void Start () {
@@ -13,4 +13,7 @@ public class GameAsset : MonoBehaviour {
 	void Update () {
 	
 	}
+}
+public class LevelTile_Options{
+	public TilePosition position;
 }

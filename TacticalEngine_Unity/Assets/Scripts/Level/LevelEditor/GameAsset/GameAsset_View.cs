@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameAsset : MonoBehaviour {
-	public GameAsset_Data data; 
+public class GameAsset_View : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

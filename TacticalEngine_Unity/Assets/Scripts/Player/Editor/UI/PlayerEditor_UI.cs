@@ -1,14 +1,15 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UI_HUD : MonoBehaviour {
+public class PlayerEditor_UI : MonoBehaviour {
 	[HideInInspector]
-	public UI_Controller ui;
-	public Toolbar toolbar;
+	public PlayerEditor_Controller player;
+	public UI_HUD hud;
+	public FocusGroup focusGroup;
 
 	// Use this for initialization
 	void Awake () {
-		toolbar.hud = (UI_HUD)this;
+		hud.ui = (PlayerEditor_UI)this;
 	}
 	
 	// Update is called once per frame

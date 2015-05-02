@@ -3,16 +3,6 @@ using System.Collections;
 using System;
 
 public class Libonati : MonoBehaviour {
-
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 	//Math
 	static public bool pointInsideRect(Rect rect, Vector3 point){
 		return point.x >= rect.xMin && point.x <= rect.xMax && point.y <= rect.yMin && point.y >= rect.yMax;
@@ -135,6 +125,7 @@ public class Libonati : MonoBehaviour {
 
 
 	//Grid Based
+
 	public static int tileToLinear(int x, int y, int stride){
 		return y * stride + x;
 	}
@@ -182,5 +173,15 @@ public class Libonati : MonoBehaviour {
 		}
 		return new Color32(r,g,b,a);
 	}
+}
 
+public class TilePosition{
+	public int x;
+	public int y;
+	public int z;
+	public TilePosition(int X, int Y, int Z){
+		x=X;
+		y=Y;
+		z=Z;
+	}
 }

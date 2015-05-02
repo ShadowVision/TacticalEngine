@@ -3,10 +3,10 @@ using System.Collections;
 
 public class Tool_LevelHieght : Tool {
 	private bool dragging = false;
-	private LevelTile tile;
+	private GameTile tile;
 	private Vector3 lastMousePosition;
 	private Vector3 mouseDragDistance;
-	private UI_Controller ui;
+	private PlayerEditor_UI ui;
 
 	public float thresholdYInPixels = 50;
 

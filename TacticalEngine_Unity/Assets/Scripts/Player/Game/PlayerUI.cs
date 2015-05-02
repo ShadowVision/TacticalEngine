@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class GameAsset_Controller : MonoBehaviour {
+public class PlayerUI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {

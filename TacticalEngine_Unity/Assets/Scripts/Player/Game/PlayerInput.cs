@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
-using GameData;
 
-public class GameTile_Data : GameAsset_Data {
+public class PlayerInput : PlayerObject {
 
 	// Use this for initialization
 	void Start () {
@@ -11,9 +10,9 @@ public class GameTile_Data : GameAsset_Data {
 	
 	// Update is called once per frame
 	void Update () {
-	
+		Vector3 dir = new Vector3(Input.GetAxis ("Horizontal"), 0, Input.GetAxis ("Vertical"));
+
+		player.motor.move (dir);
+
 	}
-}
-public class LevelTile_Options{
-	public TilePosition position;
 }

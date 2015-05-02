@@ -32,18 +32,19 @@ public class LevelBuilder : MonoBehaviour {
 	
 	}
 	private void loadRandomLevel(){
-		LevelOptions options = new LevelOptions ();
+		Data_Level options = new Data_Level ();
 		options.sunColor = new Color (Random.Range(0f,1f),Random.Range(0f,1f),Random.Range(0f,1f));
 		options.sunBrightness = Random.Range(.2f,2f);
 		options.sunDirection = new Vector3 (Random.Range(0,180), Random.Range(0,180), 0);
 
-		List<TileOptions> tileOptions = new List<TileOptions> ();
+		List<Data_GameTile> tileOptions = new List<Data_GameTile> ();
 		for(int x=0; x<defaultMapSize; x++){
 			int height = Random.Range(1,6);
 			for(int y=0; y<height; y++){
 				for(int z=0; z<defaultMapSize; z++){
-					TileOptions to = new TileOptions ();
+					Data_GameTile to = new Data_GameTile ();
 					to.position = new TilePosition (x, y, z);
+					to.loadData(to.saveData());
 					tileOptions.Add(to);
 				}
 			}
@@ -52,17 +53,18 @@ public class LevelBuilder : MonoBehaviour {
 		level.init (options);
 	}
 	private void loadLevel(){
-		LevelOptions options = new LevelOptions ();
+		Data_Level options = new Data_Level ();
 		options.sunColor = new Color (0, 1, 1);
 		options.sunBrightness = 1f;
 		options.sunDirection = new Vector3 (45, 45, 0);
 
-		List<TileOptions> tileOptions = new List<TileOptions> ();
+		List<Data_GameTile> tileOptions = new List<Data_GameTile> ();
 		for(int x=0; x<defaultMapSize; x++){
 			for(int y=0; y<defaultMapHeight; y++){
 				for(int z=0; z<defaultMapSize; z++){
-					TileOptions to = new TileOptions ();
+					Data_GameTile to = new Data_GameTile ();
 					to.position = new TilePosition (x, y, z);
+					to.loadData(to.saveData());
 					tileOptions.Add(to);
 				}
 			}

@@ -14,5 +14,9 @@ public class PlayerInput : PlayerObject {
 
 		player.motor.move (dir);
 
+		if(Input.GetButton("Jump")){
+			player.motor.jump();
+		}
+
 	}
 }

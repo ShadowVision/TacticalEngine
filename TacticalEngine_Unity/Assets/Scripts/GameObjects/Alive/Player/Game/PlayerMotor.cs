@@ -11,6 +11,7 @@ public class PlayerMotor : PlayerObject {
 	public float moveSpeed = 10;
 	public float jumpSpeed = 10;
 	public float jumpCap = 5;
+	public int numberOfJumps = 2;
 
 	public Vector3 velocity {
 		get {
@@ -18,7 +19,9 @@ public class PlayerMotor : PlayerObject {
 		}
 	}
 
-	private float jumpCounter;
+	private float jumpCounter = 0;
+	private int jumpNum = 0;
+	private bool jumping = false;
 	private Vector3 vel; 
 	// Use this for initialization
 	void Start () {
@@ -35,7 +38,7 @@ public class PlayerMotor : PlayerObject {
 		vel.x *= 1-linearFriction;
 		vel.z *= 1-linearFriction;
 		if (player.currentState != PlayerController.PlayerState.GROUND) {
-			vel.y -= gravityForce;
+			vel.y -= gravityForce * Time.deltaTime;
 			vel.y = Mathf.Max (-terminalVelocity,vel.y);
 		} else {
 			vel.y = 0;
@@ -43,21 +46,28 @@ public class PlayerMotor : PlayerObject {
 	}
 
 	public void move(Vector3 direction){
+		//TODO Take direction and modify it to be relative to either camera direction or player direction; 
 		vel += direction * moveSpeed * Time.deltaTime;
 	}
-	public void jump(){
-		if (jumpCounter <= jumpCap) {
-			if(jumpCounter == 0){
-				//first jump tick
-			}
-			float force = jumpSpeed * Time.deltaTime;
-			vel += Vector3.up * force;
-			jumpCounter += force;
-			player.enterState(PlayerController.PlayerState.AIR);
+	public void startJump(){
+		if (jumpNum < numberOfJumps) {
+			jumpCounter = 0;
+			jumpNum++;
+			jumping = true;
+			vel.y = jumpSpeed;
+			player.enterState (PlayerController.PlayerState.AIR);
+		}
+	}
+	public void holdJump(){
+		if (jumping && jumpCounter <= jumpCap) {
+			vel.y += jumpSpeed;
+			jumpCounter += jumpSpeed;
 		}
 	}
 	private void endJump(){
 		jumpCounter = 0;
+		jumpNum = 0;
+		jumping = false;
 	}
 	public void hitGround(){
 		endJump ();

@@ -20,7 +20,9 @@ public class PlayerGraphics : PlayerObject {
 		//targetRotation = mesh.transform.rotation;
 		Vector3 vel = player.motor.velocity;
 		vel.y = 0;
-		targetRotation.SetLookRotation (new Vector3(vel.x,0,vel.z), Vector3.up);
-		meshLerp.targetRotation = targetRotation;
+		if (vel.magnitude > .01f) {
+			targetRotation.SetLookRotation (new Vector3 (vel.x, 0, vel.z), Vector3.up);
+			meshLerp.targetRotation = targetRotation;
+		}
 	}
 }

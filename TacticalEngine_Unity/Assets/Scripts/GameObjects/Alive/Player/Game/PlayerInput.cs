@@ -14,8 +14,10 @@ public class PlayerInput : PlayerObject {
 
 		player.motor.move (dir);
 
-		if(Input.GetButton("Jump")){
-			player.motor.jump();
+		if (Input.GetButtonDown ("Jump")) {
+			player.motor.startJump ();
+		} else if (Input.GetButton ("Jump")) {
+			player.motor.holdJump();
 		}
 
 	}

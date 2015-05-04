@@ -10,6 +10,8 @@ public class PlayerController : GameAsset {
 	[HideInInspector]
 	public PlayerCollision collision;
 
+	public Camera playerCamera;
+
 	public enum PlayerState{	
 		NONE,
 		GROUND,

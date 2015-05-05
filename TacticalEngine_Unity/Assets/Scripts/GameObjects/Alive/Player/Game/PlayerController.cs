@@ -10,7 +10,7 @@ public class PlayerController : GameAsset {
 	[HideInInspector]
 	public PlayerCollision collision;
 
-	public Camera playerCamera;
+	public ThirdPersonCam playerCamera;
 
 	public enum PlayerState{	
 		NONE,
@@ -39,12 +39,15 @@ public class PlayerController : GameAsset {
 
 	public void enterState(PlayerState newState){
 		if (newState != _currentState) {
-			//Debug.Log("entering state: " + newState);
+			Debug.Log("entering state: " + newState);
 			_prevState = _currentState;
 			_currentState = newState;
 			switch (newState) {
 			case PlayerState.GROUND:
 				motor.hitGround();
+				break;
+			case PlayerState.AIR:
+				collision.pauseGroundCheck(.1f);
 				break;
 			}
 		}

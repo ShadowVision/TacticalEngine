@@ -24,20 +24,22 @@ public class Lerp_Basic : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(targetTransform.localPosition != targetPosition){
-			targetTransform.localPosition = Vector3.Lerp(targetTransform.localPosition,targetPosition, Time.deltaTime * positionMod);
-			if(Vector3.Distance(targetTransform.localPosition, targetPosition) < .01f){
-				targetTransform.localPosition = targetPosition;
+		if (targetTransform != null) {
+			if (targetTransform.localPosition != targetPosition) {
+				targetTransform.localPosition = Vector3.Lerp (targetTransform.localPosition, targetPosition, Time.deltaTime * positionMod);
+				if (Vector3.Distance (targetTransform.localPosition, targetPosition) < .01f) {
+					targetTransform.localPosition = targetPosition;
+				}
 			}
-		}
-		if(targetTransform.localScale != targetScale){
-			targetTransform.localScale = Vector3.Lerp(targetTransform.localScale,targetScale, Time.deltaTime * scaleMod);
-			if(Vector3.Distance(targetTransform.localScale, targetScale) < .01f){
-				targetTransform.localScale = targetScale;
+			if (targetTransform.localScale != targetScale) {
+				targetTransform.localScale = Vector3.Lerp (targetTransform.localScale, targetScale, Time.deltaTime * scaleMod);
+				if (Vector3.Distance (targetTransform.localScale, targetScale) < .01f) {
+					targetTransform.localScale = targetScale;
+				}
 			}
-		}
-		if(targetTransform.localRotation != targetRotation){
-			targetTransform.localRotation = Quaternion.Lerp(targetTransform.localRotation, targetRotation, Time.deltaTime * rotationMod);
+			if (targetRotation != null && targetTransform.localRotation != targetRotation) {
+				targetTransform.localRotation = Quaternion.Lerp (targetTransform.localRotation, targetRotation, Time.deltaTime * rotationMod);
+			}
 		}
 	}
 }

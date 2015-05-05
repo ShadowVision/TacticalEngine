@@ -3,10 +3,11 @@ using System.Collections;
 
 public class PlayerCollision : PlayerObject {
 	
-	public Vector3 groundCheckDirection = new Vector3(0,-1f,0);
+	private Vector3 groundCheckDirection = new Vector3(0,-1f,0);
 	public float groundCheckDistance = 1f;
 
 	private RaycastHit groundHit;
+	private bool checkGround = true;
 
 	// Use this for initialization
 	void Start () {
@@ -14,15 +15,26 @@ public class PlayerCollision : PlayerObject {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void FixedUpdate () {
 		//Check to see if we are on ground
-		if (Physics.Raycast (new Ray (player.worldPosition, groundCheckDirection), out groundHit, groundCheckDistance)) {
-			player.enterState (PlayerController.PlayerState.GROUND);
-		} else if (player.currentState == PlayerController.PlayerState.GROUND) {
-			player.enterState(PlayerController.PlayerState.AIR);
+		if (checkGround) {
+			if (Physics.Raycast (new Ray (player.worldPosition, groundCheckDirection), out groundHit, groundCheckDistance)) {
+				player.enterState (PlayerController.PlayerState.GROUND);
+			} else if (player.currentState == PlayerController.PlayerState.GROUND) {
+				player.enterState (PlayerController.PlayerState.AIR);
+			}
 		}
 	}
-	
+	public void pauseGroundCheck(float seconds){
+		checkGround = false;
+		CancelInvoke ("resetGroundCheck");
+		Invoke ("resetGroundCheck", seconds);
+	}
+	private void resetGroundCheck(){
+		CancelInvoke ("resetGroundCheck");
+		checkGround = true;
+	}
+
 	public void OnCollisionEnter(Collision collision) {
 		// hit ground
 		foreach(ContactPoint contact in collision.contacts){
@@ -37,4 +49,5 @@ public class PlayerCollision : PlayerObject {
 	public void OnCollisionStay(Collision collision) {
 
 	}
+
 }

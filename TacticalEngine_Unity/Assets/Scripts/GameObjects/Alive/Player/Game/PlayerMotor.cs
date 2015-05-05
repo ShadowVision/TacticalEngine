@@ -22,6 +22,7 @@ public class PlayerMotor : PlayerObject {
 	private float jumpCounter = 0;
 	private int jumpNum = 0;
 	private bool jumping = false;
+	private bool okToUpdateJump = false;
 	private Vector3 vel; 
 	// Use this for initialization
 	void Start () {
@@ -32,12 +33,14 @@ public class PlayerMotor : PlayerObject {
 	void Update () {
 		
 	}
-	void LateUpdate(){
+	void FixedUpdate	(){
 		//rigid.AddForce (vel);
+		//transform.position = transform.position + vel;
 		rigid.velocity = vel;
 		vel.x *= 1-linearFriction;
 		vel.z *= 1-linearFriction;
 		if (player.currentState != PlayerController.PlayerState.GROUND) {
+			okToUpdateJump = true;
 			vel.y -= gravityForce * Time.deltaTime;
 			vel.y = Mathf.Max (-terminalVelocity,vel.y);
 		} else {
@@ -46,7 +49,14 @@ public class PlayerMotor : PlayerObject {
 	}
 
 	public void move(Vector3 direction){
-		//TODO Take direction and modify it to be relative to either camera direction or player direction; 
+		//lock direction change if moving. release if not
+		if (direction.magnitude < .01f) {
+			player.playerCamera.releaseInputLock();
+		} else {
+			player.playerCamera.lockInput();
+		}
+
+		direction = player.playerCamera.inputTransform.TransformDirection (direction);
 		vel += direction * moveSpeed * Time.deltaTime;
 	}
 	public void startJump(){
@@ -59,9 +69,10 @@ public class PlayerMotor : PlayerObject {
 		}
 	}
 	public void holdJump(){
-		if (jumping && jumpCounter <= jumpCap) {
+		if (okToUpdateJump && jumping && jumpCounter <= jumpCap) {
 			vel.y += jumpSpeed;
 			jumpCounter += jumpSpeed;
+			okToUpdateJump = false;
 		}
 	}
 	private void endJump(){

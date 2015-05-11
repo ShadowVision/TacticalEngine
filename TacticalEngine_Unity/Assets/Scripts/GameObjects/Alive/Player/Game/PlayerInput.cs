@@ -20,5 +20,11 @@ public class PlayerInput : PlayerObject {
 			player.motor.holdJump();
 		}
 
+		if (Input.GetButtonDown ("zLock")) {
+			player.zLock = true;
+		} else if (Input.GetButtonUp ("zLock")) {
+			player.zLock = false;
+		}
+
 	}
 }

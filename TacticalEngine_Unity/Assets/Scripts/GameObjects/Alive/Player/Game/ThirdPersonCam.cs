@@ -5,8 +5,9 @@ using UnityStandardAssets.Cameras;
 [ExecuteInEditMode]
 public class ThirdPersonCam : PivotBasedCameraRig
 {
-    [SerializeField] private float m_MoveSpeed = 3; // How fast the rig will move to keep up with target's position
-    [SerializeField] private float m_TurnSpeed = 1; // How fast the rig will turn to keep up with target's rotation
+	[SerializeField] private float m_MoveSpeed = 3; // How fast the rig will move to keep up with target's position
+	[SerializeField] private float m_TurnSpeed = 1; // How fast the rig will turn to keep up with target's rotation
+	[SerializeField] private float m_zLockTurnSpeed = 10; // How fast the rig will turn to keep up with target's rotation
     [SerializeField] private float m_RollSpeed = 0.2f;// How fast the rig will roll (around Z axis) to match target's roll.
     [SerializeField] private bool m_FollowVelocity = false;// Whether the rig will rotate in the direction of the target's velocity.
     [SerializeField] private bool m_FollowTilt = true; // Whether the rig will tilt (around X axis) with the target.
@@ -18,24 +19,26 @@ public class ThirdPersonCam : PivotBasedCameraRig
     private float m_CurrentTurnAmount; // How much to turn the camera
     private float m_TurnSpeedVelocityChange; // The change in the turn speed velocity
     private Vector3 m_RollUp = Vector3.up;// The roll of the camera around the z axis ( generally this will always just be up )
-	private Transform m_inputTransform;//Transform to base input off of. Can be locked to stop following camera
 	private bool inputLock;//used to lock cameratransform so that it doesn't effect player movement
-
-	public Transform inputTransform {
-		get {
-			return m_inputTransform;
+	private float savedTurnSpeed;
+	
+	public Transform inputTransform;//Transform to base input off of. Can be locked to stop following camera
+	public bool inputLocked{
+		get{
+			return inputLock;
 		}
 	}
 	protected override void Awake ()
 	{
 		base.Awake ();
-		m_inputTransform = new GameObject ("InputTransform").transform;
+		inputTransform.parent = null;
 	}
     protected override void FollowTarget(float deltaTime)
     {
         // if no target, or no time passed then we quit early, as there is nothing to do
-        if (!(deltaTime > 0) || m_Target == null)
-        {
+		// if (!(deltaTime > 0) || m_Target == null)
+		if (m_Target == null)
+			{
             return;
         }
 
@@ -94,8 +97,8 @@ public class ThirdPersonCam : PivotBasedCameraRig
         // camera position moves towards target position:
         transform.position = Vector3.Lerp(transform.position, m_Target.position, deltaTime*m_MoveSpeed);
 		if (!inputLock) {
-			m_inputTransform.position = transform.position;
-			m_inputTransform.rotation = transform.rotation;
+			inputTransform.position = transform.position;
+			inputTransform.rotation = transform.rotation;
 		}
 
         // camera's rotation is split into two parts, which can have independend speed settings:
@@ -116,9 +119,24 @@ public class ThirdPersonCam : PivotBasedCameraRig
     }
 
 	public void lockInput(){
-		inputLock = true;
+		if (!inputLock) {
+			Debug.Log ("Locking Input");
+			inputLock = true;
+		}
 	}
 	public void releaseInputLock(){
-		inputLock = false;
+		if (inputLock) {
+			Debug.Log ("Unlocking Input");
+			inputLock = false;
+		}
+	}
+
+	public void zLock(bool isZLocking){
+		if (isZLocking) {
+			savedTurnSpeed = m_TurnSpeed;
+			m_TurnSpeed = m_zLockTurnSpeed;
+		} else {
+			m_TurnSpeed = savedTurnSpeed;
+		}
 	}
 }

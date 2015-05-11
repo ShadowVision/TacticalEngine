@@ -5,6 +5,7 @@ public class PlayerCollision : PlayerObject {
 	
 	private Vector3 groundCheckDirection = new Vector3(0,-1f,0);
 	public float groundCheckDistance = 1f;
+	public float minWallRunSize = 1f;
 
 	private RaycastHit groundHit;
 	private bool checkGround = true;
@@ -36,11 +37,21 @@ public class PlayerCollision : PlayerObject {
 	}
 
 	public void OnCollisionEnter(Collision collision) {
+		Vector3 normal = Vector3.zero;
+
 		// hit ground
 		foreach(ContactPoint contact in collision.contacts){
+			normal += contact.normal;
 			if (contact.normal.y < 0 && Mathf.Abs(contact.normal.y) > Mathf.Abs(contact.normal.x)) {
 				player.enterState (PlayerController.PlayerState.GROUND);
+				return;
 			}
+		}
+		normal /= collision.contacts.Length;
+		if (player.currentState == PlayerController.PlayerState.AIR && collision.collider.bounds.size.magnitude > minWallRunSize) {
+			//hit wall that we can run on
+			Debug.Log("Wall Normal: " + normal);
+			player.enterState(PlayerController.PlayerState.WALL);
 		}
 	}
 	public void OnCollisionExit(Collision collision) {

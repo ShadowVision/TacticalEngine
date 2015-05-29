@@ -21,9 +21,9 @@ public class PlayerInput : PlayerObject {
 		}
 
 		if (Input.GetButtonDown ("zLock")) {
-			player.zLock = true;
+			player.setZLock(true);
 		} else if (Input.GetButtonUp ("zLock")) {
-			player.zLock = false;
+			player.setZLock(false);
 		}
 
 	}

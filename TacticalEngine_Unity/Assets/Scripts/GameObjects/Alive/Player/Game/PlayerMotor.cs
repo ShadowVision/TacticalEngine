@@ -46,8 +46,8 @@ public class PlayerMotor : PlayerObject {
 	}
 	void FixedUpdate	(){
 		//rigid.AddForce (vel);
-		//transform.position = transform.position + vel;
-		rigid.velocity = vel;
+		//transform.position = transform.position + vel;	
+		rigid.velocity = player.transform.worldToLocalMatrix.MultiplyVector(vel);
 
 		switch (player.currentState) {
 		case PlayerController.PlayerState.GROUND:
@@ -75,7 +75,7 @@ public class PlayerMotor : PlayerObject {
 		if (player.currentState == PlayerController.PlayerState.WALL) {
 
 		} else {
-			if (player.zLock) {
+			if (player.isZLocked) {
 				player.playerCamera.releaseInputLock ();
 			} else {
 				//lock direction change if moving. release if not
@@ -148,6 +148,9 @@ public class PlayerMotor : PlayerObject {
 		gravity = wallRunGravityForce;
 		vel.y *= .5f;
 		endJump (false);
+		if (jumpCounter >= jumpCap) {
+			jumpCounter = jumpCap-1;
+		}
 	}
 	public void endWallRun(){
 		gravity = gravityForce;

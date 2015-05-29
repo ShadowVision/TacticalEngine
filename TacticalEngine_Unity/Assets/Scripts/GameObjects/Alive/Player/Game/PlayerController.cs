@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerController : GameAsset {
+public class PlayerController : AliveAsset {
 
 	[HideInInspector]
 	public PlayerMotor motor;
@@ -9,6 +9,8 @@ public class PlayerController : GameAsset {
 	public PlayerInput input;
 	[HideInInspector]
 	public PlayerCollision collision;
+	[HideInInspector]
+	public PlayerGraphics graphics;
 
 	public ThirdPersonCam playerCamera;
 
@@ -36,50 +38,30 @@ public class PlayerController : GameAsset {
 		FINISHED
 	}
 	private zStatus currentZStatus = zStatus.UNLOCKED;
-	public bool zLock{
+
+	public bool isZLocked{
 		get{
 			return zLocked;
-		}set{
-			if(value && !zLocked){
-				Debug.Log("Locking");
-				zLocked = true;
-				playerCamera.zLock (true);
-				currentZStatus = zStatus.LOCKING;
-				Invoke("finishZLock", zLockTimeoutInSeconds);
-			}else if (!value && zLocked){
-				if(currentZStatus == zStatus.FINISHED){
-					Debug.Log("Unlocking: Finished");
-					zLocked = false;
-					currentZStatus = zStatus.UNLOCKED;
-					playerCamera.zLock (false);
-				}else{
-					Debug.Log("Unlocking: Waiting to finish");
-					currentZStatus = zStatus.UNLOCKME;
-				}
-			}
-		}
-	}
-	private void finishZLock(){
-		if (currentZStatus == zStatus.UNLOCKME) {
-			Debug.Log("Finished: Unlocking");
-			currentZStatus = zStatus.FINISHED;
-			zLock = false;
-		} else {
-			Debug.Log("Finished: Still Holding");
-			currentZStatus = zStatus.FINISHED;
 		}
 	}
 
 	// Use this for initialization
-	void Awake () {
+	override protected void Awake () {
+		base.Awake ();
 		motor = gameObject.GetComponent<PlayerMotor> ();
 		input = gameObject.GetComponent<PlayerInput> ();
 		collision = gameObject.GetComponent<PlayerCollision> ();
+		graphics = gameObject.GetComponent<PlayerGraphics> ();
+		orientation.OnNewOrientation = OnNewOrientation;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
+	}
+
+	private void OnNewOrientation(Vector3 up){
+		graphics.OnNewOrientation (up);
 	}
 
 	public void enterState(PlayerState newState){
@@ -112,6 +94,46 @@ public class PlayerController : GameAsset {
 	public override void OnCollisionStay (Collision collision)
 	{
 		this.collision.OnCollisionStay (collision);
+	}
+
+	public void setZLock(bool zLock){
+		if(zLock && !zLocked){
+			startZLock();
+		}else if (!zLock && zLocked){
+			stopZLock ();
+		}
+	}	
+
+	private void startZLock(){
+		Debug.Log("Locking");
+		zLocked = true;
+		playerCamera.zLock (true);
+		currentZStatus = zStatus.LOCKING;
+		Invoke("finishZLock", zLockTimeoutInSeconds);
+		if(currentState == PlayerState.WALL){
+//			setGravityToWall();
+		}
+	}
+	private void stopZLock(){
+		if(currentZStatus == zStatus.FINISHED){
+			Debug.Log("Unlocking: Finished");
+			zLocked = false;
+			currentZStatus = zStatus.UNLOCKED;
+			playerCamera.zLock (false);
+		}else{
+			Debug.Log("Unlocking: Waiting to finish");
+			currentZStatus = zStatus.UNLOCKME;
+		}
+	}
+	private void finishZLock(){
+		if (currentZStatus == zStatus.UNLOCKME) {
+			Debug.Log("Finished: Unlocking");
+			currentZStatus = zStatus.FINISHED;
+			setZLock(false);
+		} else {
+			Debug.Log("Finished: Still Holding");
+			currentZStatus = zStatus.FINISHED;
+		}
 	}
 
 

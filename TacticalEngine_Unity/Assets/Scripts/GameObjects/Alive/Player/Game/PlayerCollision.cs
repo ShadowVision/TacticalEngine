@@ -3,7 +3,16 @@ using System.Collections;
 
 public class PlayerCollision : PlayerObject {
 	
-	private Vector3 groundCheckDirection = new Vector3(0,-1f,0);
+	private Vector3 groundCheckDirection{
+		get{
+			return player.orientation.down;
+		}
+	}
+	private Vector3 wallCheckDirection{
+		get{
+			return player.orientation.wallDir;
+		}
+	}
 	public float groundCheckDistance = 1f;
 	public float minWallRunSize = 1f;
 
@@ -17,12 +26,13 @@ public class PlayerCollision : PlayerObject {
 	
 	// Update is called once per frame
 	void FixedUpdate () {
-		//Check to see if we are on ground
-		if (checkGround) {
-			if (Physics.Raycast (new Ray (player.worldPosition, groundCheckDirection), out groundHit, groundCheckDistance)) {
-				player.enterState (PlayerController.PlayerState.GROUND);
-			} else if (player.currentState == PlayerController.PlayerState.GROUND) {
-				player.enterState (PlayerController.PlayerState.AIR);
+		hitTestGround ();
+
+		if (player.currentState == PlayerController.PlayerState.WALL) {
+			if(Physics.Raycast(new Ray(player.worldPosition, wallCheckDirection), out groundHit, groundCheckDistance)){
+
+			}else{
+				player.enterState(PlayerController.PlayerState.AIR);
 			}
 		}
 	}
@@ -41,13 +51,16 @@ public class PlayerCollision : PlayerObject {
 
 		// hit ground
 		foreach(ContactPoint contact in collision.contacts){
-			normal += contact.normal;
-			if (contact.normal.y < 0 && Mathf.Abs(contact.normal.y) > Mathf.Abs(contact.normal.x)) {
-				player.enterState (PlayerController.PlayerState.GROUND);
-				return;
+			Vector3 n = player.transform.worldToLocalMatrix.MultiplyVector(contact.normal);
+			normal += n;
+			if (n.y < 0 && Mathf.Abs(n.y) > Mathf.Abs(n.x)) {
+				//Debug.Log("Wall Normal: " + n);
+				//player.enterState (PlayerController.PlayerState.GROUND);
+				//return;
 			}
 		}
 		normal /= collision.contacts.Length;
+
 		if (player.currentState == PlayerController.PlayerState.AIR && collision.collider.bounds.size.magnitude > minWallRunSize) {
 			//hit wall that we can run on
 			Debug.Log("Wall Normal: " + normal);
@@ -59,6 +72,20 @@ public class PlayerCollision : PlayerObject {
 	}
 	public void OnCollisionStay(Collision collision) {
 
+	}
+	public bool hitTestGround(){
+		//Check to see if we are on ground
+		if (checkGround) {
+			if (Physics.Raycast (new Ray (player.worldPosition, groundCheckDirection), out groundHit, groundCheckDistance)) {
+				player.enterState (PlayerController.PlayerState.GROUND);
+				player.orientation.setGround(groundHit.normal);
+				return true;
+			} else if (player.currentState == PlayerController.PlayerState.GROUND) {
+				player.enterState (PlayerController.PlayerState.AIR);
+				return false;
+			}
+		}
+		return false;
 	}
 
 }

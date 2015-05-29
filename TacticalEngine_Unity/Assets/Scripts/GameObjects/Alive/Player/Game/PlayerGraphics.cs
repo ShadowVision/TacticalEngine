@@ -27,7 +27,7 @@ public class PlayerGraphics : PlayerObject {
 		//targetRotation = mesh.transform.rotation;
 		Vector3 vel = player.motor.velocity;
 		vel.y = 0;
-		if(player.zLock){
+		if(player.isZLocked){
 			//targetRotation.SetLookRotation(new Vector3(vel.x/15, 0, Mathf.Abs(vel.x/15)), Vector3.up);
 			//bodyLerp.targetRotation = targetRotation;
 		}if (player.currentState == PlayerController.PlayerState.WALL) {
@@ -39,5 +39,9 @@ public class PlayerGraphics : PlayerObject {
 				meshLerp.targetRotation = targetRotation;
 			}
 		}
+	}
+
+	public void OnNewOrientation(Vector3 up){
+		player.transform.up = up;
 	}
 }

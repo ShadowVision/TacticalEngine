@@ -2,6 +2,11 @@
 using System.Collections;
 
 public class CameraController : MonoBehaviour {
+	public static Camera cam{
+		get{
+			return CameraSwitch.activeCamera;
+		}
+	}
 
 	// Use this for initialization
 	void Start () {

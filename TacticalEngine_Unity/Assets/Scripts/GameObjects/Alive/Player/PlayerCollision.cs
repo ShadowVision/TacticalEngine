@@ -32,7 +32,7 @@ public class PlayerCollision : PlayerObject {
 			if(Physics.Raycast(new Ray(player.worldPosition, wallCheckDirection), out groundHit, groundCheckDistance)){
 
 			}else{
-				player.enterState(PlayerController.PlayerState.AIR);
+				//player.enterState(PlayerController.PlayerState.AIR);
 			}
 		}
 	}
@@ -47,7 +47,7 @@ public class PlayerCollision : PlayerObject {
 	}
 
 	public void OnCollisionEnter(Collision collision) {
-		Vector3 normal = Vector3.zero;
+		/*Vector3 normal = Vector3.zero;
 
 		// hit ground
 		foreach(ContactPoint contact in collision.contacts){
@@ -65,7 +65,7 @@ public class PlayerCollision : PlayerObject {
 			//hit wall that we can run on
 			Debug.Log("Wall Normal: " + normal);
 			player.enterState(PlayerController.PlayerState.WALL);
-		}
+		}*/
 	}
 	public void OnCollisionExit(Collision collision) {
 
@@ -77,6 +77,9 @@ public class PlayerCollision : PlayerObject {
 		//Check to see if we are on ground
 		if (checkGround) {
 			if (Physics.Raycast (new Ray (player.worldPosition, groundCheckDirection), out groundHit, groundCheckDistance)) {
+				if(player.currentState != PlayerController.PlayerState.GROUND){
+					Debug.Log("Hit Ground: " + groundHit.normal);
+				}
 				player.enterState (PlayerController.PlayerState.GROUND);
 				player.orientation.setGround(groundHit.normal);
 				return true;

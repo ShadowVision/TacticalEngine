@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+namespace TileEngine{
 public class Toolbar : MonoBehaviour {
 	[HideInInspector]
 	public UI_HUD hud;
@@ -18,4 +19,5 @@ public class Toolbar : MonoBehaviour {
 			tool.deselect();
 		}
 	}
+}
 }

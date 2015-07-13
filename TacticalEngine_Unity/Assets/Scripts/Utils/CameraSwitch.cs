@@ -2,13 +2,16 @@
 using System.Collections;
 
 public class CameraSwitch : MonoBehaviour {
-	static Camera activeCamera;
+	public static Camera activeCamera;
 	public Camera[] cameras;
 	public int startI = 0;
 	public KeyCode nextKeyCode;
 	public KeyCode prevKeyCode;
 
 	private int currentI = 0;
+
+	public delegate void OnCamUpdate(Camera newCamera);
+	public OnCamUpdate onCamUpdate;
 
 	// Use this for initialization
 	void Start () {
@@ -39,6 +42,9 @@ public class CameraSwitch : MonoBehaviour {
 		if(cameras[i] != null){
 			cameras [i].enabled = true;
 			activeCamera = cameras[i];
+		}
+		if (onCamUpdate != null) {
+			onCamUpdate(activeCamera);
 		}
 	}
 	public void nextCamera(){

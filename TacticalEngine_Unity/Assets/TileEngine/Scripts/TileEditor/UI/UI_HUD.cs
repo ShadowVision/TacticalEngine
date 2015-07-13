@@ -1,19 +1,20 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerEditor_UI : MonoBehaviour {
+namespace TileEngine{
+public class UI_HUD : MonoBehaviour {
 	[HideInInspector]
-	public PlayerEditor_Controller player;
-	public UI_HUD hud;
-	public FocusGroup focusGroup;
+	public Editor_UI ui;
+	public Toolbar toolbar;
 
 	// Use this for initialization
 	void Awake () {
-		hud.ui = (PlayerEditor_UI)this;
+		toolbar.hud = (UI_HUD)this;
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+}
 }

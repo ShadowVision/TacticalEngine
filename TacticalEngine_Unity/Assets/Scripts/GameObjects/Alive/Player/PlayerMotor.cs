@@ -47,7 +47,7 @@ public class PlayerMotor : PlayerObject {
 	void FixedUpdate	(){
 		//rigid.AddForce (vel);
 		//transform.position = transform.position + vel;	
-		rigid.velocity = player.transform.worldToLocalMatrix.MultiplyVector(vel);
+		rigid.velocity = player.transform.localToWorldMatrix.MultiplyVector(vel);
 
 		switch (player.currentState) {
 		case PlayerController.PlayerState.GROUND:

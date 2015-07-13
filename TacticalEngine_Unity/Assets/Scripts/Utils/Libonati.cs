@@ -175,7 +175,7 @@ public class Libonati : MonoBehaviour {
 	}
 }
 
-public class TilePosition{
+public class TilePosition : IEquatable<TilePosition>{
 	public int x;
 	public int y;
 	public int z;
@@ -183,5 +183,28 @@ public class TilePosition{
 		x=X;
 		y=Y;
 		z=Z;
+	}
+	public override string ToString ()
+	{
+		return x + ", " + y + ", " + z;
+	}
+	public override bool Equals(System.Object obj )
+	{
+		var other = obj as TilePosition;
+		if( other == null ) return false;
+		
+		return Equals (other);             
+	}
+	public override int GetHashCode()
+	{
+		return x.GetHashCode() ^ y.GetHashCode() ^ z.GetHashCode();
+	}
+	public bool Equals( TilePosition other )
+	{
+		if (other.x == this.x && other.y == this.y && other.z == this.z) {
+			return true;
+		}
+		return false;
+		
 	}
 }

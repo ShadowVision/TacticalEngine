@@ -1,12 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+namespace TileEngine{
 public class Tool_LevelHieght : Tool {
 	private bool dragging = false;
 	private GameTile tile;
 	private Vector3 lastMousePosition;
 	private Vector3 mouseDragDistance;
-	private PlayerEditor_UI ui;
+	private Editor_UI ui;
 
 	public float thresholdYInPixels = 50;
 
@@ -72,4 +73,5 @@ public class Tool_LevelHieght : Tool {
 			dragging = false;
 		}
 	}
+}
 }

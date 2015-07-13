@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+namespace TileEngine{
 public class Tool : MonoBehaviour {
 	[HideInInspector]
 	public Toolbar toolbar;
@@ -29,4 +30,5 @@ public class Tool : MonoBehaviour {
 	public void captureTile(){
 		
 	}
+}
 }
